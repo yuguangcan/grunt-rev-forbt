@@ -34,9 +34,14 @@ module.exports = function(grunt) {
 
         var hash = md5(f, options.algorithm, 'hex', options.encoding),
           prefix = hash.slice(0, options.length),
-          renamed = [prefix, path.basename(f)].join('.'),
-          outPath = path.resolve(path.dirname(f), renamed);
+          renamed = [prefix, path.basename(f)].join('.');
 
+        // check file whether been md5ed or not
+        if(path.basename(f).substr(0,prefix.length) == prefix){
+            renamed = path.basename(f);
+        }
+        
+        var outPath = path.resolve(path.dirname(f), renamed);
         grunt.verbose.ok().ok(hash);
         fs.renameSync(f, outPath);
         grunt.log.write(f + ' ').ok(renamed);
